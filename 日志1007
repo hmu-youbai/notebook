@@ -1,1 +1,56 @@
+对于caps pcr的策略
+首先是 分离标品
+
+# 这里如果不存在hmc/mc混合的时候，分离的策略是比对，通常是caps这样少量C-T的数据，比对的比对率高
+# 所以这里第一个问题是，一旦C-T转化之后，比对率下降
+
+
+
+Caps-pcr-hmc_ES
+Caps-pcr-mc_ES
+
+
+##### 方案一：低C-T转化的，正常bwa mem比对，获取标品序列   （hmc）
+                        对于C-T转化多的，用bismark获取标品序列             （mc）
+
+
+
+seqtk trimfq -b 30 {input} > {output}
+
+第一步，直接cut前30bp。
+seqtk trimfq -b 30 caps_pcr_Tn5_Caps-hmc-ES_1.fq >  trim_caps_pcr_Tn5_Caps-hmc-ES_1.fq
+seqtk trimfq -b 30 caps_pcr_Tn5_Caps-mc-ES_1.fq >  trim_caps_pcr_Tn5_Caps-mc-ES_1.fq
+
+第一步，直接cut后的数据分别比对bwa和bismark
+
+第三步，分离内参的bam（sam）
+samtools view -b 11.sam  |samtools sort > 11.bam && samtools index 11.bam
+
+samtools view -b   11.bam "lambda" "mc" > tt.bam
+
+第四步，结合sam和原始文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
